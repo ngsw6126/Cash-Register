@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>レジ精算アプリ</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .container {
+            background-color: #ffffff;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 650px; /* Adjust max-width for better mobile view */
+            box-sizing: border-box;
+            overflow: hidden; /* Ensure content fits */
+        }
+        h1, h2 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 25px;
+            font-weight: 700;
+        }
+        .input-section, .output-section {
+            margin-bottom: 30px;
+        }
+        .input-group {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding: 10px 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        .input-group:last-of-type {
+            border-bottom: none;
+        }
+        .input-group label {
+            flex: 2;
+            color: #34495e;
+            font-size: 1rem;
+            padding-right: 15px;
+            white-space: nowrap; /* Prevent label wrapping */
+        }
+        .input-group input[type="number"] {
+            flex: 1;
+            padding: 10px 12px;
+            border: 1px solid #ced4da;
+            border-radius: 8px;
+            font-size: 1rem;
+            box-sizing: border-box;
+            -moz-appearance: textfield; /* Hide arrows in Firefox */
+            text-align: right; /* Align numbers to the right */
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+        .input-group input[type="number"]:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+            outline: none;
+        }
+        /* Hide arrows for Chrome, Safari, Edge */
+        .input-group input::-webkit-outer-spin-button,
+        .input-group input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        button {
+            width: 100%;
+            padding: 14px 25px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.15rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+            margin-top: 20px;
+            box-shadow: 0 4px 10px rgba(0, 123, 255, 0.3);
+        }
+        button:hover {
+            background-color: #0056b3;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0, 123, 255, 0.4);
+        }
+        button:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 5px rgba(0, 123, 255, 0.2);
+        }
+        table {
+            width: 100%;
+            border-collapse: separate; /* Use separate for rounded corners on cells */
+            border-spacing: 0; /* Remove space between cells */
+            margin-top: 20px;
+            border-radius: 8px; /* Apply rounded corners to the table */
+            overflow: hidden; /* Hide overflowing content for rounded corners */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+        }
+        table th, table td {
+            border: 1px solid #dee2e6;
+            padding: 14px;
+            text-align: left;
+            font-size: 0.95rem;
+            color: #34495e;
+        }
+        table th {
+            background-color: #e9ecef;
+            color: #495057;
+            font-weight: 600;
+            text-align: center;
+        }
+        table td:nth-child(3) { /* Value column */
+            text-align: right;
+            font-weight: 500;
+            color: #28a745; /* Green for values */
+        }
+        table tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+        table tr:hover {
+            background-color: #e2e6ea;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            h1 {
+                font-size: 1.8rem;
+            }
+            h2 {
+                font-size: 1.4rem;
+            }
+            .input-group {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .input-group label {
+                margin-bottom: 8px;
+                font-size: 0.95rem;
+                width: 100%; /* Full width for label on small screens */
+            }
+            .input-group input[type="number"] {
+                width: 100%;
+                text-align: left; /* Align input to left on small screens */
+            }
+            button {
+                font-size: 1.05rem;
+                padding: 12px 20px;
+            }
+            table th, table td {
+                padding: 10px;
+                font-size: 0.85rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>レジ精算アプリ</h1>
+
+        <div class="input-section">
+            <h2>売上日報入力</h2>
+            <!-- Input fields for "読み取る情報" - Non-gift related items first -->
+            <div class="input-group">
+                <label for="inputA">合計</label>
+                <input type="number" id="inputA" value="">
+            </div>
+            <div class="input-group">
+                <label for="inputB">レジ客数</label>
+                <input type="number" id="inputB" value="">
+            </div>
+            <div class="input-group">
+                <label for="inputC">現金</label>
+                <input type="number" id="inputC" value="">
+            </div>
+            <div class="input-group">
+                <label for="inputK">掛売</label>
+                <input type="number" id="inputK" value="">
+            </div>
+            <div class="input-group">
+                <label for="inputQ">ギフト過剰</label>
+                <input type="number" id="inputQ" value="">
+            </div>
+            <div class="input-group">
+                <label for="inputR">消費税等</label>
+                <input type="number" id="inputR" value="">
+            </div>
+
+            <!-- Gift-related items moved to the bottom -->
+            <div class="input-group">
+                <label for="inputD">SCギフト 釣銭無 [金額] (ギフト別日報参照)</label>
+                <input type="number" id="inputD" value="">
+            </div>
+            <div class="input-group">
+                <label for="inputE">SCギフト 釣銭無 [件数] (ギフト別日報参照)</label>
+                <input type="number" id="inputE" value="">
+            </div>
+            <div class="input-group">
+                <label for="inputF">SCギフト [金額] (ギフト別日報参照)</label>
+                <input type="number" id="inputF" value="">
+            </div>
+            <div class="input-group">
+                <label for="inputG">SCギフト [件数] (ギフト別日報参照)</label>
+                <input type="number" id="inputG" value="">
+            </div>
+            <div class="input-group">
+                <label for="inputH">SC商品券 (ギフト別日報参照)</label>
+                <input type="number" id="inputH" value="">
+            </div>
+            <div class="input-group">
+                <label for="inputI">ACS値引券 釣銭無 (ギフト別日報参照)</label>
+                <input type="number" id="inputI" value="">
+            </div>
+            <div class="input-group">
+                <label for="inputJ">WAONポイント (ギフト別日報参照)</label>
+                <input type="number" id="inputJ" value="">
+            </div>
+            <div class="input-group">
+                <label for="inputL">グルメカード (ギフト別日報参照)</label>
+                <input type="number" id="inputL" value="">
+            </div>
+            <div class="input-group">
+                <label for="inputM">SC500円券 (ギフト別日報参照)</label>
+                <input type="number" id="inputM" value="">
+            </div>
+            <div class="input-group">
+                <label for="inputN">RHG共通商品券 (ギフト別日報参照)</label>
+                <input type="number" id="inputN" value="">
+            </div>
+            <div class="input-group">
+                <label for="inputO">SC割引券 (ギフト別日報参照)</label>
+                <input type="number" id="inputO" value="">
+            </div>
+            <div class="input-group">
+                <label for="inputP">指定ギフト券 釣銭無 (ギフト別日報参照)</label>
+                <input type="number" id="inputP" value="">
+            </div>
+            <button id="calculateBtn">計算</button>
+        </div>
+
+        <div class="output-section">
+            <h2>振り分ける項目</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>項目</th>
+                        <th>計算方法</th>
+                        <th>値</th>
+                    </tr>
+                </thead>
+                <tbody id="resultTableBody">
+                    <tr>
+                        <td>①総売上額</td>
+                        <td>=A</td>
+                        <td id="output1"></td>
+                    </tr>
+                    <tr>
+                        <td>③客数</td>
+                        <td>=B</td>
+                        <td id="output3"></td>
+                    </tr>
+                    <tr>
+                        <td>④現金売上額</td>
+                        <td>=C-Q</td>
+                        <td id="output4"></td>
+                    </tr>
+                    <tr>
+                        <td>⑤指定クレジット 売上額</td>
+                        <td>=D+F</td>
+                        <td id="output5"></td>
+                    </tr>
+                    <tr>
+                        <td>⑥指定クレジット 売上件数</td>
+                        <td>=E+G</td>
+                        <td id="output6"></td>
+                    </tr>
+                    <tr>
+                        <td>⑩商品券回収額総額</td>
+                        <td>=H</td>
+                        <td id="output10"></td>
+                    </tr>
+                    <tr>
+                        <td>⑪AFS値引券</td>
+                        <td>=I</td>
+                        <td id="output11"></td>
+                    </tr>
+                    <tr>
+                        <td>⑫ポイント利用額</td>
+                        <td>=J</td>
+                        <td id="output12"></td>
+                    </tr>
+                    <tr>
+                        <td>⑬掛売金額</td>
+                        <td>=K</td>
+                        <td id="output13"></td>
+                    </tr>
+                    <tr>
+                        <td>⑮ギフト券額面総額</td>
+                        <td>=L+M+N+O</td>
+                        <td id="output15"></td>
+                    </tr>
+                    <tr>
+                        <td>⑯★指定ギフト券</td>
+                        <td>=P</td>
+                        <td id="output16"></td>
+                    </tr>
+                    <tr>
+                        <td>⑭入金機投入金額</td>
+                        <td>=C-Q</td>
+                        <td id="output14"></td>
+                    </tr>
+                    <tr>
+                        <td>⑮消費税金額</td>
+                        <td>=R</td>
+                        <td id="output25"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const calculateBtn = document.getElementById('calculateBtn');
+
+            // Function to perform all calculations and update the table
+            function calculateSettlement() {
+                // Get input values from all fields. Use parseFloat and default to 0 if not a valid number.
+                // If the input field is empty, parseFloat will return NaN, which will then be converted to 0 by || 0.
+                const A = parseFloat(document.getElementById('inputA').value) || 0;
+                const B = parseFloat(document.getElementById('inputB').value) || 0;
+                const C = parseFloat(document.getElementById('inputC').value) || 0;
+                const D = parseFloat(document.getElementById('inputD').value) || 0;
+                const E = parseFloat(document.getElementById('inputE').value) || 0;
+                const F = parseFloat(document.getElementById('inputF').value) || 0;
+                const G = parseFloat(document.getElementById('inputG').value) || 0;
+                const H = parseFloat(document.getElementById('inputH').value) || 0;
+                const I = parseFloat(document.getElementById('inputI').value) || 0;
+                const J = parseFloat(document.getElementById('inputJ').value) || 0;
+                const K = parseFloat(document.getElementById('inputK').value) || 0;
+                const L = parseFloat(document.getElementById('inputL').value) || 0;
+                const M = parseFloat(document.getElementById('inputM').value) || 0;
+                const N = parseFloat(document.getElementById('inputN').value) || 0;
+                const O = parseFloat(document.getElementById('inputO').value) || 0;
+                const P = parseFloat(document.getElementById('inputP').value) || 0;
+                const Q = parseFloat(document.getElementById('inputQ').value) || 0;
+                const R = parseFloat(document.getElementById('inputR').value) || 0;
+
+                // Perform calculations based on the provided formulas in the image
+                // ①総売上額 = A
+                const output1 = A;
+                // ③客数 = B
+                const output3 = B;
+                // ④現金売上額 = C-Q
+                const output4 = C - Q;
+                // ⑤指定クレジット 売上額 = D+F
+                const output5 = D + F;
+                // ⑥指定クレジット 売上件数 = E+G
+                const output6 = E + G;
+                // ⑩商品券回収額総額 = H
+                const output10 = H;
+                // ⑪AFS値引券 = I
+                const output11 = I;
+                // ⑫ポイント利用額 = J
+                const output12 = J;
+                // ⑬掛売金額 = K
+                const output13 = K;
+                // ⑮ギフト券額面総額 = L+M+N+O
+                const output15 = L + M + N + O;
+                // ⑯★指定ギフト券 = P
+                const output16 = P;
+                // ⑭入金機投入金額 = C-Q (Based on the image, this formula is the same as ④現金売上額)
+                const output14 = C - Q;
+                // ⑮消費税金額 = R (The image shows 25 for this, but I'll use 25 as the ID)
+                const output25 = R;
+
+                // Update the output fields in the table
+                // Use toLocaleString() for better number formatting (e.g., with commas)
+                document.getElementById('output1').textContent = output1.toLocaleString();
+                document.getElementById('output3').textContent = output3.toLocaleString();
+                document.getElementById('output4').textContent = output4.toLocaleString();
+                document.getElementById('output5').textContent = output5.toLocaleString();
+                document.getElementById('output6').textContent = output6.toLocaleString();
+                document.getElementById('output10').textContent = output10.toLocaleString();
+                document.getElementById('output11').textContent = output11.toLocaleString();
+                document.getElementById('output12').textContent = output12.toLocaleString();
+                document.getElementById('output13').textContent = output13.toLocaleString();
+                document.getElementById('output15').textContent = output15.toLocaleString();
+                document.getElementById('output16').textContent = output16.toLocaleString();
+                document.getElementById('output14').textContent = output14.toLocaleString();
+                document.getElementById('output25').textContent = output25.toLocaleString();
+            }
+
+            // Attach event listener to the calculate button
+            calculateBtn.addEventListener('click', calculateSettlement);
+
+            // Attach event listeners to all input fields to recalculate on input change
+            // This provides a more dynamic and responsive user experience
+            const inputFields = document.querySelectorAll('.input-section input[type="number"]');
+            inputFields.forEach(input => {
+                input.addEventListener('input', calculateSettlement);
+            });
+
+            // Perform initial calculation when the page loads to display default values
+            // Since initial values are now empty, this will display 0 for all outputs initially.
+            calculateSettlement();
+        });
+    </script>
+</body>
+</html>
