@@ -23,9 +23,9 @@
             border-radius: 12px;
             box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
             width: 100%;
-            max-width: 650px; /* Adjust max-width for better mobile view */
+            max-width: 650px;
             box-sizing: border-box;
-            overflow: hidden; /* Ensure content fits */
+            overflow: hidden;
         }
         h1, h2 {
             color: #2c3e50;
@@ -37,9 +37,10 @@
             margin-bottom: 30px;
         }
         .input-group {
+            /* 常に縦に並ぶように flex-direction を column に設定 */
             display: flex;
-            justify-content: space-between;
-            align-items: center;
+            flex-direction: column;
+            align-items: flex-start;
             margin-bottom: 15px;
             padding: 10px 0;
             border-bottom: 1px solid #e0e0e0;
@@ -48,21 +49,22 @@
             border-bottom: none;
         }
         .input-group label {
-            flex: 2;
+            /* ラベルをフル幅にする */
+            width: 100%;
             color: #34495e;
             font-size: 1rem;
-            padding-right: 15px;
-            white-space: nowrap; /* Prevent label wrapping */
+            margin-bottom: 8px; /* ラベルと入力ボックスの間にスペースを追加 */
         }
         .input-group input[type="number"] {
-            flex: 1;
+            /* 入力ボックスをフル幅にする */
+            width: 100%;
             padding: 10px 12px;
             border: 1px solid #ced4da;
             border-radius: 8px;
             font-size: 1rem;
             box-sizing: border-box;
-            -moz-appearance: textfield; /* Hide arrows in Firefox */
-            text-align: right; /* Align numbers to the right */
+            -moz-appearance: textfield;
+            text-align: left; /* 左揃えに統一 */
             transition: border-color 0.2s ease, box-shadow 0.2s ease;
         }
         .input-group input[type="number"]:focus {
@@ -101,11 +103,11 @@
         }
         table {
             width: 100%;
-            border-collapse: separate; /* Use separate for rounded corners on cells */
-            border-spacing: 0; /* Remove space between cells */
+            border-collapse: separate;
+            border-spacing: 0;
             margin-top: 20px;
-            border-radius: 8px; /* Apply rounded corners to the table */
-            overflow: hidden; /* Hide overflowing content for rounded corners */
+            border-radius: 8px;
+            overflow: hidden;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
         }
         table th, table td {
@@ -117,14 +119,14 @@
         }
         table th:first-child,
         table td:first-child {
-            width: 50%; /* 項目列の幅を50%に設定 */
+            width: 50%;
         }
         table th:nth-child(2),
         table td:nth-child(2) {
-            width: 50%; /* 値列の幅を50%に設定 */
-            text-align: right; /* 値の列は右揃えを維持 */
+            width: 50%;
+            text-align: right;
             font-weight: 500;
-            color: #28a745; /* Green for values */
+            color: #28a745;
         }
         table th {
             background-color: #e9ecef;
@@ -139,7 +141,7 @@
             background-color: #e2e6ea;
         }
 
-        /* Responsive adjustments */
+        /* Responsive adjustments for mobile, keeping consistent layout for all screen sizes */
         @media (max-width: 768px) {
             .container {
                 padding: 15px;
@@ -149,19 +151,6 @@
             }
             h2 {
                 font-size: 1.4rem;
-            }
-            .input-group {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-            .input-group label {
-                margin-bottom: 8px;
-                font-size: 0.95rem;
-                width: 100%; /* Full width for label on small screens */
-            }
-            .input-group input[type="number"] {
-                width: 100%;
-                text-align: left; /* Align input to left on small screens */
             }
             button {
                 font-size: 1.05rem;
@@ -180,7 +169,7 @@
 
         <div class="input-section">
             <h2>売上日報入力</h2>
-            <!-- Input fields for "読み取る情報" - Non-gift related items first -->
+            <!-- Input fields now always vertical -->
             <div class="input-group">
                 <label for="inputA">合計</label>
                 <input type="number" id="inputA" value="">
@@ -198,7 +187,7 @@
                 <input type="number" id="inputK" value="">
             </div>
             <div class="input-group">
-                <label for="inputQ">ギフト釣銭</label>
+                <label for="inputQ">ギフト過剰</label>
                 <input type="number" id="inputQ" value="">
             </div>
             <div class="input-group">
@@ -206,7 +195,6 @@
                 <input type="number" id="inputR" value="">
             </div>
 
-            <!-- Gift-related items moved to the bottom -->
             <div class="input-group">
                 <label for="inputD">SCギフト 釣銭無 [金額] (ギフト別日報参照)</label>
                 <input type="number" id="inputD" value="">
@@ -289,19 +277,19 @@
                         <td id="output6"></td>
                     </tr>
                     <tr>
-                        <td>⑪商品券回収額総額</td>
+                        <td>⑩商品券回収額総額</td>
                         <td id="output10"></td>
                     </tr>
                     <tr>
-                        <td>⑫AFS値引券</td>
+                        <td>⑪AFS値引券</td>
                         <td id="output11"></td>
                     </tr>
                     <tr>
-                        <td>⑬ポイント利用額</td>
+                        <td>⑫ポイント利用額</td>
                         <td id="output12"></td>
                     </tr>
                     <tr>
-                        <td>⑭掛売金額</td>
+                        <td>⑬掛売金額</td>
                         <td id="output13"></td>
                     </tr>
                     <tr>
@@ -313,11 +301,11 @@
                         <td id="output16"></td>
                     </tr>
                     <tr>
-                        <td>㉔入金機投入金額</td>
+                        <td>⑭入金機投入金額</td>
                         <td id="output14"></td>
                     </tr>
                     <tr>
-                        <td>㉕消費税金額</td>
+                        <td>⑮消費税金額</td>
                         <td id="output25"></td>
                     </tr>
                 </tbody>
