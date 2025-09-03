@@ -23,9 +23,12 @@
             border-radius: 12px;
             box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
             width: 100%;
-            max-width: 650px;
+            max-width: 900px; /* 項目と画像を並べるために最大幅を広げる */
             box-sizing: border-box;
             overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
         }
         h1, h2 {
             color: #2c3e50;
@@ -33,11 +36,36 @@
             margin-bottom: 25px;
             font-weight: 700;
         }
+        .input-section-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
         .input-section, .output-section {
             margin-bottom: 30px;
         }
+        .input-section {
+            flex: 1 1 400px;
+            max-width: 450px;
+        }
+        .input-image {
+            flex: 1 1 400px;
+            max-width: 400px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 10px;
+            border-radius: 8px;
+            background-color: #fafafa;
+        }
+        .input-image img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 6px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
         .input-group {
-            /* 常に縦に並ぶように flex-direction を column に設定 */
             display: flex;
             flex-direction: column;
             align-items: flex-start;
@@ -49,14 +77,12 @@
             border-bottom: none;
         }
         .input-group label {
-            /* ラベルをフル幅にする */
             width: 100%;
             color: #34495e;
             font-size: 1rem;
-            margin-bottom: 8px; /* ラベルと入力ボックスの間にスペースを追加 */
+            margin-bottom: 8px;
         }
         .input-group input[type="number"] {
-            /* 入力ボックスをフル幅にする */
             width: 100%;
             padding: 10px 12px;
             border: 1px solid #ced4da;
@@ -64,7 +90,7 @@
             font-size: 1rem;
             box-sizing: border-box;
             -moz-appearance: textfield;
-            text-align: left; /* 左揃えに統一 */
+            text-align: left;
             transition: border-color 0.2s ease, box-shadow 0.2s ease;
         }
         .input-group input[type="number"]:focus {
@@ -72,7 +98,6 @@
             box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
             outline: none;
         }
-        /* Hide arrows for Chrome, Safari, Edge */
         .input-group input::-webkit-outer-spin-button,
         .input-group input::-webkit-inner-spin-button {
             -webkit-appearance: none;
@@ -140,25 +165,13 @@
         table tr:hover {
             background-color: #e2e6ea;
         }
-
-        /* Responsive adjustments for mobile, keeping consistent layout for all screen sizes */
         @media (max-width: 768px) {
-            .container {
-                padding: 15px;
+            .input-section-container {
+                flex-direction: column;
             }
-            h1 {
-                font-size: 1.8rem;
-            }
-            h2 {
-                font-size: 1.4rem;
-            }
-            button {
-                font-size: 1.05rem;
-                padding: 12px 20px;
-            }
-            table th, table td {
-                padding: 10px;
-                font-size: 0.85rem;
+            .input-section, .input-image {
+                flex: 1 1 100%;
+                max-width: 100%;
             }
         }
     </style>
@@ -167,85 +180,88 @@
     <div class="container">
         <h1>レジ精算アプリ</h1>
 
-        <div class="input-section">
-            <h2>売上日報入力</h2>
-            <!-- Input fields now always vertical -->
-            <div class="input-group">
-                <label for="inputA">＊＝合計</label>
-                <input type="number" id="inputA" value="">
+        <div class="input-section-container">
+            <div class="input-section">
+                <h2>売上日報入力</h2>
+                <div class="input-group">
+                    <label for="inputA">①＊＝合計</label>
+                    <input type="number" id="inputA" value="">
+                </div>
+                <div class="input-group">
+                    <label for="inputB">②レジ客数</label>
+                    <input type="number" id="inputB" value="">
+                </div>
+                <div class="input-group">
+                    <label for="inputC">③+現金</label>
+                    <input type="number" id="inputC" value="">
+                </div>
+                <div class="input-group">
+                    <label for="inputK">④+掛売</label>
+                    <input type="number" id="inputK" value="">
+                </div>
+                <div class="input-group">
+                    <label for="inputQ">⑤-ギフト釣銭</label>
+                    <input type="number" id="inputQ" value="">
+                </div>
+                <div class="input-group">
+                    <label for="inputR">⑥+消費税等</label>
+                    <input type="number" id="inputR" value="">
+                </div>
+                <!-- Gift-related items moved to the bottom as before -->
+                <div class="input-group">
+                    <label for="inputD">SCギフト 釣銭無 [金額] (ギフト別日報参照)</label>
+                    <input type="number" id="inputD" value="">
+                </div>
+                <div class="input-group">
+                    <label for="inputE">SCギフト 釣銭無 [件数] (ギフト別日報参照)</label>
+                    <input type="number" id="inputE" value="">
+                </div>
+                <div class="input-group">
+                    <label for="inputF">SCギフト [金額] (ギフト別日報参照)</label>
+                    <input type="number" id="inputF" value="">
+                </div>
+                <div class="input-group">
+                    <label for="inputG">SCギフト [件数] (ギフト別日報参照)</label>
+                    <input type="number" id="inputG" value="">
+                </div>
+                <div class="input-group">
+                    <label for="inputH">SC商品券 (ギフト別日報参照)</label>
+                    <input type="number" id="inputH" value="">
+                </div>
+                <div class="input-group">
+                    <label for="inputI">ACS値引券 釣銭無 (ギフト別日報参照)</label>
+                    <input type="number" id="inputI" value="">
+                </div>
+                <div class="input-group">
+                    <label for="inputJ">WAONポイント (ギフト別日報参照)</label>
+                    <input type="number" id="inputJ" value="">
+                </div>
+                <div class="input-group">
+                    <label for="inputL">グルメカード (ギフト別日報参照)</label>
+                    <input type="number" id="inputL" value="">
+                </div>
+                <div class="input-group">
+                    <label for="inputM">SC500円券 (ギフト別日報参照)</label>
+                    <input type="number" id="inputM" value="">
+                </div>
+                <div class="input-group">
+                    <label for="inputN">RHG共通商品券 (ギフト別日報参照)</label>
+                    <input type="number" id="inputN" value="">
+                </div>
+                <div class="input-group">
+                    <label for="inputO">SC割引券 (ギフト別日報参照)</label>
+                    <input type="number" id="inputO" value="">
+                </div>
+                <div class="input-group">
+                    <label for="inputP">指定ギフト券 釣銭無 (ギフト別日報参照)</label>
+                    <input type="number" id="inputP" value="">
+                </div>
+                <button id="calculateBtn">計算</button>
             </div>
-            <div class="input-group">
-                <label for="inputB">レジ客数</label>
-                <input type="number" id="inputB" value="">
+            <div class="input-image">
+                <img src="images/receipt.pig" alt="レジ精算レシートのサンプル画像">
             </div>
-            <div class="input-group">
-                <label for="inputC">+現金</label>
-                <input type="number" id="inputC" value="">
-            </div>
-            <div class="input-group">
-                <label for="inputK">+掛売</label>
-                <input type="number" id="inputK" value="">
-            </div>
-            <div class="input-group">
-                <label for="inputQ">-ギフト釣銭</label>
-                <input type="number" id="inputQ" value="">
-            </div>
-            <div class="input-group">
-                <label for="inputR">+消費税等</label>
-                <input type="number" id="inputR" value="">
-            </div>
-
-            <div class="input-group">
-                <label for="inputD">SCギフト 釣銭無 [金額] (ギフト別日報参照)</label>
-                <input type="number" id="inputD" value="">
-            </div>
-            <div class="input-group">
-                <label for="inputE">SCギフト 釣銭無 [件数] (ギフト別日報参照)</label>
-                <input type="number" id="inputE" value="">
-            </div>
-            <div class="input-group">
-                <label for="inputF">SCギフト [金額] (ギフト別日報参照)</label>
-                <input type="number" id="inputF" value="">
-            </div>
-            <div class="input-group">
-                <label for="inputG">SCギフト [件数] (ギフト別日報参照)</label>
-                <input type="number" id="inputG" value="">
-            </div>
-            <div class="input-group">
-                <label for="inputH">SC商品券 (ギフト別日報参照)</label>
-                <input type="number" id="inputH" value="">
-            </div>
-            <div class="input-group">
-                <label for="inputI">ACS値引券 釣銭無 (ギフト別日報参照)</label>
-                <input type="number" id="inputI" value="">
-            </div>
-            <div class="input-group">
-                <label for="inputJ">WAONポイント (ギフト別日報参照)</label>
-                <input type="number" id="inputJ" value="">
-            </div>
-            <div class="input-group">
-                <label for="inputL">グルメカード (ギフト別日報参照)</label>
-                <input type="number" id="inputL" value="">
-            </div>
-            <div class="input-group">
-                <label for="inputM">SC500円券 (ギフト別日報参照)</label>
-                <input type="number" id="inputM" value="">
-            </div>
-            <div class="input-group">
-                <label for="inputN">RHG共通商品券 (ギフト別日報参照)</label>
-                <input type="number" id="inputN" value="">
-            </div>
-            <div class="input-group">
-                <label for="inputO">SC割引券 (ギフト別日報参照)</label>
-                <input type="number" id="inputO" value="">
-            </div>
-            <div class="input-group">
-                <label for="inputP">指定ギフト券 釣銭無 (ギフト別日報参照)</label>
-                <input type="number" id="inputP" value="">
-            </div>
-            <button id="calculateBtn">計算</button>
         </div>
-
         <div class="output-section">
             <h2>ＣＣＴ入力項目</h2>
             <table>
@@ -312,15 +328,11 @@
             </table>
         </div>
     </div>
-
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const calculateBtn = document.getElementById('calculateBtn');
 
-            // Function to perform all calculations and update the table
             function calculateSettlement() {
-                // Get input values from all fields. Use parseFloat and default to 0 if not a valid number.
-                // If the input field is empty, parseFloat will return NaN, which will then be converted to 0 by || 0.
                 const A = parseFloat(document.getElementById('inputA').value) || 0;
                 const B = parseFloat(document.getElementById('inputB').value) || 0;
                 const C = parseFloat(document.getElementById('inputC').value) || 0;
@@ -340,36 +352,20 @@
                 const Q = parseFloat(document.getElementById('inputQ').value) || 0;
                 const R = parseFloat(document.getElementById('inputR').value) || 0;
 
-                // Perform calculations based on the provided formulas in the image
-                // ①総売上額 = A
                 const output1 = A;
-                // ③客数 = B
                 const output3 = B;
-                // ④現金売上額 = C-Q
                 const output4 = C - Q;
-                // ⑤指定クレジット 売上額 = D+F
                 const output5 = D + F;
-                // ⑥指定クレジット 売上件数 = E+G
                 const output6 = E + G;
-                // ⑩商品券回収額総額 = H
                 const output10 = H;
-                // ⑪AFS値引券 = I
                 const output11 = I;
-                // ⑫ポイント利用額 = J
                 const output12 = J;
-                // ⑬掛売金額 = K
                 const output13 = K;
-                // ⑮ギフト券額面総額 = L+M+N+O
                 const output15 = L + M + N + O;
-                // ⑯★指定ギフト券 = P
                 const output16 = P;
-                // ⑭入金機投入金額 = C-Q (Based on the image, this formula is the same as ④現金売上額)
                 const output14 = C - Q;
-                // ⑮消費税金額 = R (The image shows 25 for this, but I'll use 25 as the ID)
                 const output25 = R;
 
-                // Update the output fields in the table
-                // Use toLocaleString() for better number formatting (e.g., with commas)
                 document.getElementById('output1').textContent = output1.toLocaleString();
                 document.getElementById('output3').textContent = output3.toLocaleString();
                 document.getElementById('output4').textContent = output4.toLocaleString();
@@ -385,18 +381,11 @@
                 document.getElementById('output25').textContent = output25.toLocaleString();
             }
 
-            // Attach event listener to the calculate button
             calculateBtn.addEventListener('click', calculateSettlement);
-
-            // Attach event listeners to all input fields to recalculate on input change
-            // This provides a more dynamic and responsive user experience
             const inputFields = document.querySelectorAll('.input-section input[type="number"]');
             inputFields.forEach(input => {
                 input.addEventListener('input', calculateSettlement);
             });
-
-            // Perform initial calculation when the page loads to display default values
-            // Since initial values are now empty, this will display 0 for all outputs initially.
             calculateSettlement();
         });
     </script>
