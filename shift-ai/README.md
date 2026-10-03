@@ -34,7 +34,10 @@
 
 ## 使い方（Google Colab）
 
-1. [AIシフト作成.ipynb](AIシフト作成.ipynb) を開き、「Open in Colab」を押します（GitHubから直接開けます）。
+1. 次のリンクを開きます（Googleアカウントでログインしておきます）。
+   [Colabで開く](https://colab.research.google.com/github/ngsw6126/Cash-Register/blob/claude/sleepy-wozniak-ucx993/shift-ai/AI%E3%82%B7%E3%83%95%E3%83%88%E4%BD%9C%E6%88%90.ipynb)
+   - 「警告: このノートブックは Google が作成したものではありません」と出たら「このまま実行」を押します。
+   - 自分のDriveに保存しておくと次から楽です（「ファイル」→「ドライブにコピーを保存」）。
 2. **はじめて使うとき**
    1. 完成済みの月のExcelをアップロードします。
    2. モード「学習」で実行し、`AI設定.xlsx` をダウンロードします。
