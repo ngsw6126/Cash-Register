@@ -1,6 +1,0 @@
-# 店舗のExcel（実名入り）や出力はコミットしない
-*.xlsm
-AI設定*.xlsx
-AIシフト*.xlsx
-__pycache__/
-.pytest_cache/
